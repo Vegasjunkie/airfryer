@@ -1,6 +1,5 @@
-const CACHE = 'airfryer-v1';
+const CACHE = 'airfryer-v2';
 const ASSETS = [
-  './',
   './index.html',
   './manifest.json',
   './icons/icon-192x192.png',
@@ -22,10 +21,11 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
+  if (e.request.mode === 'navigate') {
+    e.respondWith(caches.match('./index.html'));
+    return;
+  }
   e.respondWith(
     caches.match(e.request).then(cached => cached || fetch(e.request))
   );
 });
-```
-
-Dann ist alles komplett und die App ist live unter **`https://vegasjunkie.github.io/airfryer/`**
